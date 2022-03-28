@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTL Logic Converter</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="./Table.js"></script>
+    <script src="./GenerateEquation.js"></script>
+</head>
+<body onload="focusMain()">
+    <label for="inputSize" id="inputLabel">How many input bits?</label>
+    <input type="text" name="inputSize" id="inputSize" autocomplete="off">
+    <br>
+    <label for="outputSize" id="outputLabel">How many output bits?</label>
+    <input type="text" name="outputSize" id="outputSize" autocomplete="off">
+    <button onclick="createTable()" id="createButton">Create my table!</button>
+    <div id="TableLocation"></div>
+    
+
+    <div id="tableControl" style="display: none;">
+        <button onclick="Navigate('last')" class="NavButton Left">&#8592;</button>
+        <button onclick="Navigate('next')" class="NavButton Right">&#8594;</button>
+        <input type="text" name="DataIn" id="DataIn">
+        <button onclick="ConfirmData()">Submit</button>
+        <button onclick="CompleteTable()">Complete Table!</button>
+    </div>
+    <div id="Output"></div>
+</body>
+
+</html>
