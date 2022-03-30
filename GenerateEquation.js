@@ -1,7 +1,7 @@
 class TableGenerator{
     constructor(inputSize, outputSize){
-        this.inSize = inputSize;
-        this.outSize = outputSize
+        this.inSize = parseInt(inputSize);
+        this.outSize = parseInt(outputSize)
         this.outputTableList = new Array(this.outSize)
         this.inputTableList = new Array(Math.pow(2, this.inSize))
         for(let i = 0; i < this.outputTableList.length; i++){
@@ -83,37 +83,62 @@ class TableGenerator{
         }
         console.log(this.equation[lowestUnusedIndex])
         
-        //this.simplifyExpression()
+        //this.equation[lowestUnusedIndex] = this.simplifyExpression(this.equation[lowestUnusedIndex])
     }
 
-    simplifyExpression(){
-        for(let setValues = 0; setValues < Math.pow(2, inputSize); setValues++){
-            let values = new Array(inputSize)
-            for(let z = 0; z < values.length; z++){
-                values[z] = setValues % (0b1 << z) ? true : false;
-            }
-            console.log("test")
-            for(let i = 0; i < this.equation.length; i++){
-                let workingTerm = this.equation[i]
-                
-                let termCumulative = false;
-                let currentSet = false;
+    simplifyExpression(arr){
+        let simpEq = "("
 
-                workingTerm = workingTerm.split("+")
-                for(let i = 0; i < workingTerm.length; i++){
-                    workingTerm[i].replace('(', '')
-                    workingTerm[i].replace(')', '')
-                    let terms = workingTerm[i].split("*")
-                    terms[0].replace("(","")
-                    terms[terms.length-1].replace(")","")
-                    console.log(terms)
-                    for(let j = 0; j < terms.length; terms++){
-                        if(terms[j] == "'"){
-                            currentSet = currentSet && false
+        let EqParts = arr.split("+")
+
+        for(let i = 0; i < EqParts.length; i++){
+            if(EqParts[i].charAt(0) == '('){
+                EqParts[i] = EqParts[i].substring(1, EqParts[i].length - 1)
+            }
+            if(EqParts[i].charAt(EqParts[i].length - 1) == ')'){
+                EqParts[i] = EqParts[i].substring(0, EqParts[i].length - 1)
+            }
+        }
+
+
+        for(let a = 0; a < EqParts.length -1; a++){ 
+            
+            
+            let currEqA = EqParts[a].split("*")
+            for(let b = a; b < EqParts.length; b++){
+                let diffIndex = -3;
+                let diff = 0;
+                let currEqB = EqParts[b].split("*")
+
+                for(let index = 0; index < currEqB.length; index++){
+                    if(currEqA[index] !== currEqB[index]){
+                        diff++;
+                        diffIndex = index;
+                    }
+                }
+                if(diff == 1){
+                    for(let i = 0; i < currEqA.length; i++){
+                        if(i != diffIndex){
+                            simpEq += currEqA[i]
                         }
                     }
+                    simpEq += ")+("
+                    break;
+                }
+                else{
+                    simpEq += EqParts[a] + ")+("
                 }
             }
         }
+
+        if(simpEq.charAt(simpEq.length - 2) == '+'){
+            let currentEq = simpEq.split('');
+            currentEq[currentEq.length - 2] = ""
+            currentEq[currentEq.length - 1] = ""
+            simpEq = currentEq.join("");
+        }
+        return simpEq;
+
+
     }
 }

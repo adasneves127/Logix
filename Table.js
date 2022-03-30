@@ -65,6 +65,57 @@ function createTable(){
     document.getElementById("DataIn").focus()
 }
 
+function createTablefromFile(inSize, outSize, Data){
+
+    inputSize = inSize
+    outputSize = outSize
+    const TableLocation = document.getElementById("TableLocation");
+    const Table = document.createElement("table")
+    TableLocation.appendChild(Table)
+    const TableHeader = document.createElement("tr")
+    Table.appendChild(TableHeader)
+    for(let i = 0; i < inputSize; i++){
+        let currentCol = document.createElement("th")
+        let currentData = document.createTextNode("In" + i);
+        currentCol.appendChild(currentData);
+        TableHeader.appendChild(currentCol)
+    }
+    for(let i = 0; i < outputSize; i++){
+        let currentCol = document.createElement("th")
+        let currentData = document.createTextNode("Out" + i);
+        currentCol.appendChild(currentData);
+        TableHeader.appendChild(currentCol)
+    }
+
+    for(let height = 0; height < Math.pow(2, inputSize); height++){
+        let currentRow = document.createElement("tr")
+        let number = convertNumToBin(height, inputSize)
+        Table.appendChild(currentRow);
+        for(let widthInput = 0; widthInput < inputSize; widthInput++){
+            let currentCol = document.createElement("td")
+            currentCol.setAttribute("id", `Input${widthInput + (inputSize * height)}`)
+            let currentData = document.createTextNode(number[widthInput])
+            currentRow.appendChild(currentCol)
+            currentCol.appendChild(currentData)
+        }
+        for(let widthOut = 0; widthOut < outputSize; widthOut++){
+            let currentCol = document.createElement("td")
+            currentCol.setAttribute("id", `Output${widthOut + (outputSize * height)}`)
+            currentRow.appendChild(currentCol)
+        }
+    }
+    //selectCell("rgba(255, 0, 0, 0.5)")
+    document.getElementById("tableControl").style.display="inline-block"
+    document.getElementById("DataIn").focus()
+
+    Data.forEach(data =>{
+        document.getElementById("DataIn").value = data
+        ConfirmData();
+    })
+
+
+}
+
 
 function download(data, filename, type) {
     var file = new Blob([data], {type: type});
@@ -133,4 +184,54 @@ function CompleteTable(){
     let tableGen = new TableGenerator(inputSize, outputSize)
     tableGen.generateEq();
 
+}
+
+function saveFile(){
+    let fileOutput = ""
+    fileOutput += "<settings>"
+    fileOutput += `<insize>${inputSize}</insize>`
+    fileOutput += `<outsize>${outputSize}</outsize>`
+    fileOutput += "</settings>"
+    fileOutput += "<table>"
+    for(let i = 0; i < Math.pow(2, inputSize); i++){
+        fileOutput += "<row>\n"
+        for(let j = 0; j < outputSize; j++){
+            fileOutput += `<cell>${document.getElementById(`Output${j + (outputSize * i)}`).innerText}</cell>\n`
+        }
+        fileOutput += "</row>\n"
+    }
+    fileOutput += "</table>\n"
+    download(fileOutput, `Table_${inputSize}_${outputSize}.xml`, "text/xml")
+}
+
+function loadFile(){
+    let file = document.getElementById("FileUpload").files[0];
+    if(file){
+        let reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function(e){
+            let xml = e.target.result;
+            let settings = xml.match(/<settings>.*<\/settings>/g)
+            let table = xml.match(/<table>.*<\/table>/g)
+            //let insize = settings[0].match(/<insize>.*<\/insize>/g)[0].replace(/<insize>|<\/insize>/g, "")
+            //let outsize = settings[0].match(/<outsize>.*<\/outsize>/g)[0].replace(/<outsize>|<\/outsize>/g, "")
+            let input = xml.match(/<input>.*<\/input>/g)
+            let output = xml.match(/<output>.*<\/output>/g)
+            //let inputSize = parseInt(insize)
+            //let outputSize = parseInt(outsize)
+            let data = xml.split("<cell>")
+            for(let i = 0; i < data.length; i++){
+                data[i] = data[i].replace(/<cell>|<\/cell>/g, "")
+            }
+
+            for(let i = 0; i < settings.length; i++){
+                settings[i] = settings[i].replace(/<inSize>|<\/inSize>/g, "")
+                settings[i] = settings[i].replace(/<outSize>|<\/outSize>/g, "")
+            }
+            inputSize = parseInt(settings[0])
+            outputSize = parseFloat(settings[1])
+            createTablefromFile(settings[0], settings[1], data)
+
+        }
+    }
 }

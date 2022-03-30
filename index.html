@@ -16,6 +16,9 @@
     <label for="outputSize" id="outputLabel">How many output bits?</label>
     <input type="text" name="outputSize" id="outputSize" autocomplete="off">
     <button onclick="createTable()" id="createButton">Create my table!</button>
+    <br>
+    <input type="file" name="FileUpload" id="FileUpload">
+    <button onclick="loadFile()">Load</button>
     <div id="TableLocation"></div>
     
 
@@ -25,7 +28,9 @@
         <input type="text" name="DataIn" id="DataIn">
         <button onclick="ConfirmData()">Submit</button>
         <button onclick="CompleteTable()">Complete Table!</button>
+        <button onclick="saveFile()">Save Table</button>
     </div>
+    
     <div id="Output"></div>
 </body>
 
