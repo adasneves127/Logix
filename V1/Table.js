@@ -5,7 +5,14 @@ function focusMain(){
     document.getElementById("inputSize").focus();
 }
 
+function renameRow(name, index){
+    console.log(document.getElementById("Header" + index))
+    document.getElementById(`Header${index}`).innerHTML = name;
+
+}
+
 function createTable(){
+    createLoadOptions();
     
     let inputL, outputL, outputI, inputI, createB;
     
@@ -32,12 +39,14 @@ function createTable(){
     Table.appendChild(TableHeader)
     for(let i = 0; i < inputSize; i++){
         let currentCol = document.createElement("th")
+        currentCol.setAttribute("id", "Header" + i)
         let currentData = document.createTextNode("In" + i);
         currentCol.appendChild(currentData);
         TableHeader.appendChild(currentCol)
     }
     for(let i = 0; i < outputSize; i++){
         let currentCol = document.createElement("th")
+        currentCol.setAttribute("id", "Header" + (i+inputSize))
         let currentData = document.createTextNode("Out" + i);
         currentCol.appendChild(currentData);
         TableHeader.appendChild(currentCol)
@@ -63,57 +72,6 @@ function createTable(){
     selectCell("rgba(255, 0, 0, 0.5)")
     document.getElementById("tableControl").style.display="inline-block"
     document.getElementById("DataIn").focus()
-}
-
-function createTablefromFile(inSize, outSize, Data){
-
-    inputSize = inSize
-    outputSize = outSize
-    const TableLocation = document.getElementById("TableLocation");
-    const Table = document.createElement("table")
-    TableLocation.appendChild(Table)
-    const TableHeader = document.createElement("tr")
-    Table.appendChild(TableHeader)
-    for(let i = 0; i < inputSize; i++){
-        let currentCol = document.createElement("th")
-        let currentData = document.createTextNode("In" + i);
-        currentCol.appendChild(currentData);
-        TableHeader.appendChild(currentCol)
-    }
-    for(let i = 0; i < outputSize; i++){
-        let currentCol = document.createElement("th")
-        let currentData = document.createTextNode("Out" + i);
-        currentCol.appendChild(currentData);
-        TableHeader.appendChild(currentCol)
-    }
-
-    for(let height = 0; height < Math.pow(2, inputSize); height++){
-        let currentRow = document.createElement("tr")
-        let number = convertNumToBin(height, inputSize)
-        Table.appendChild(currentRow);
-        for(let widthInput = 0; widthInput < inputSize; widthInput++){
-            let currentCol = document.createElement("td")
-            currentCol.setAttribute("id", `Input${widthInput + (inputSize * height)}`)
-            let currentData = document.createTextNode(number[widthInput])
-            currentRow.appendChild(currentCol)
-            currentCol.appendChild(currentData)
-        }
-        for(let widthOut = 0; widthOut < outputSize; widthOut++){
-            let currentCol = document.createElement("td")
-            currentCol.setAttribute("id", `Output${widthOut + (outputSize * height)}`)
-            currentRow.appendChild(currentCol)
-        }
-    }
-    //selectCell("rgba(255, 0, 0, 0.5)")
-    document.getElementById("tableControl").style.display="inline-block"
-    document.getElementById("DataIn").focus()
-
-    Data.forEach(data =>{
-        document.getElementById("DataIn").value = data
-        ConfirmData();
-    })
-
-
 }
 
 
@@ -235,3 +193,23 @@ function loadFile(){
         }
     }
 }
+
+function createLoadOptions(){
+    
+
+    for(let i = 0; i < inputSize; i++){
+        let currentCol = document.createElement("th")
+        currentCol.setAttribute("id", "Header" + i)
+        let currentData = document.createTextNode("In" + i);
+        currentCol.appendChild(currentData);
+        TableHeader.appendChild(currentCol)
+    }
+    for(let i = 0; i < outputSize; i++){
+        let currentCol = document.createElement("th")
+        currentCol.setAttribute("id", "Header" + (i+inputSize))
+        let currentData = document.createTextNode("Out" + i);
+        currentCol.appendChild(currentData);
+        TableHeader.appendChild(currentCol)
+    }
+}
+

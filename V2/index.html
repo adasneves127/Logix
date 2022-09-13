@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logix</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="sketch.js"></script>
+    <script src="Setup.js"></script>
+</head>
+<body onload="openTab(event, 'Setup')">
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'Setup')">Setup</button>
+        <button class="tablinks" onclick="openTab(event, 'Table')">Table</button>
+        <button class="tablinks" onclick="openTab(event, 'Settings')">Settings</button>
+      </div>
+      
+      <!-- Tab content -->
+      <div id="Setup" class="tabcontent">
+        <h3>Setup</h3>
+        <h4>Input</h4>
+        <div id="InputSettings">
+            <label for="Input1">Input 1:</label>
+            <input type="text" name="boxName" id="Input1">
+        </div>
+        <button onclick="addInput()">Add Row</button>
+        <hr>
+
+        <h4>Output</h4>
+        <div id="OutputSettings">
+            <label for="Out1">Output 1:</label>
+            <input type="text" name="boxName" id="Out1">
+        </div>
+        
+        <button onclick="addOutput()">Add Row</button>
+        <hr>
+        <button onclick="createTable()">Create</button>
+      </div>
+
+      
+      <div id="Table" class="tabcontent">
+        <h3>Table</h3>
+        <div id="tableDiv"></div>
+        <h4 id="TableWarning" stype="display: block">Warning: Table has not been created!</h4>
+      </div>
+      
+      <div id="Settings" class="tabcontent">
+        <h3>Settings</h3>
+        <p>Enter a function to load</p>
+        <label for="FunctionInput">Function:</label>
+        <input type="text" name="boxName" id="FunctionInput">
+        <button onclick="loadFunction()">Load</button>
+      </div>
+</body>
+</html>

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="./Table.js"></script>
     <script src="./GenerateEquation.js"></script>
+    <script src="Logic.js"></script>
 </head>
 <body onload="focusMain()">
     <label for="inputSize" id="inputLabel">How many input bits?</label>
@@ -16,9 +17,6 @@
     <label for="outputSize" id="outputLabel">How many output bits?</label>
     <input type="text" name="outputSize" id="outputSize" autocomplete="off">
     <button onclick="createTable()" id="createButton">Create my table!</button>
-    <br>
-    <input type="file" name="FileUpload" id="FileUpload">
-    <button onclick="loadFile()">Load</button>
     <div id="TableLocation"></div>
     
 
@@ -32,6 +30,8 @@
     </div>
     
     <div id="Output"></div>
+
+    <div id="LoadControl">    </div>
 </body>
 
 </html>
