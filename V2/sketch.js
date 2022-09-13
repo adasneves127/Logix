@@ -1,9 +1,11 @@
 let currentTable;
 
+
 function table(x, y){
     this.inputSize = x;
     this.outputSize = y;
     this.tableDict = {};
+    this.headerDef = {}
     this.table;
     this.create = function(){
         //Create Table
@@ -23,8 +25,9 @@ function table(x, y){
         let headerRow = document.createElement("tr");
         for(let i = 0; i < this.inputSize; i++){
             let header = document.createElement("th");
-            header.innerText = document.getElementById(`Input${i+1}`).value;
+            header.innerText = document.getElementById(`Input${i+1}`).value.toUpperCase();
             headerRow.appendChild(header);
+            this.headerDef[header.innerText] = "Input";
             
             this.tableDict["Header"]['Input'].push(header.innerText);
         }
@@ -33,8 +36,10 @@ function table(x, y){
 
         for(let i = 0; i < this.outputSize; i++){
             let header = document.createElement("th");
-            header.innerText = document.getElementById(`Out${i+1}`).value;
+            header.innerText = document.getElementById(`Out${i+1}`).value.toUpperCase();
             headerRow.appendChild(header);
+
+            this.headerDef[header.innerText] = "Output";
             this.tableDict["Header"]['Output'].push(header.innerText);
         }
 
@@ -79,11 +84,22 @@ function table(x, y){
                 return;
             }
         })
+        //Find IDs for each row
+        let inputType = new Array(2);
+        let outputType;
+        outputType = this.headerDef[splitFunc[0]];
+        inputType[0] = (this.headerDef[eq.left]);
+        inputType[1] = (this.headerDef[eq.right]);
+
         console.log(eq);
         for(let i = 0; i < this.tableDict["Rows"].length; i++){
-            let outputRow = document.getElementById(`Output${splitFunc[0]}Row${i+1}`);
-            let leftIn = eq.operation == "~" ? "0": document.getElementById(`Input${eq.left}Row${i+1}`).innerText;
-            let rightIn = document.getElementById(`Input${eq.right}Row${i+1}`).innerText;
+
+            
+
+            let outputRow = document.getElementById(`${outputType}${splitFunc[0]}Row${i+1}`);
+            let leftIn = eq.operation == "~" ? "0": document.getElementById(`${inputType[0]}${eq.left}Row${i+1}`).innerText;
+            let rightIn = document.getElementById(`${inputType[1]}${eq.right}Row${i+1}`).innerText;
+            
 
             leftVal = leftIn == "1" ? true : false;
             rightVal = rightIn == "1" ? true : false;
@@ -93,7 +109,7 @@ function table(x, y){
                     outputRow.innerText = leftVal && rightVal ? "1" : "0";
                     break;
                 case "->":
-                    outputRow.innerText = !leftVal || rightVal ? "1" : "0";
+                    outputRow.innerText = !rightVal || leftVal ? "1" : "0";
                     break;
                 case "v":
                     outputRow.innerText = leftVal || rightVal ? "1" : "0";
@@ -110,44 +126,11 @@ function table(x, y){
 
 
         }
-            this.updateTable();
-        
-    }
-
-    this.parseEq = function(eq, inputs){
-        //This will be able to handle the following operations:
-            //AND
-            //OR
-            //NOT
-            //Implies
-            //Double Implies
-            // and Parenthesis
-        
-        //First, we need to remove all spaces
-        eq = eq.replace(/\s/g, '');
-        //Next, we need to split the equation into their parenthesis groupings
-        let parenthesis = [];
-        let currentParenthesis = "";
-        let parenthesisLevel = 0;
-        for(let i = 0; i < eq.length; i++){
-            if(eq[i] == "("){
-                parenthesisLevel++;
-            }
-            if(eq[i] == ")"){
-                parenthesisLevel--;
-            }
-            if(parenthesisLevel == 0){
-                parenthesis.push(currentParenthesis);
-                currentParenthesis = "";
-            }
-            else{
-                currentParenthesis += eq[i];
-            }
-        }
-            
+        //this.updateTable(outputType);
+        openTab(event, "Table");
     }
     
-    this.updateTable = function(){
+    this.updateTable = function(outputType){
         for(let i = 0; i < this.tableDict["Rows"].length; i++){
             let currentRow = this.tableDict["Rows"][i];
             let input = currentRow['Input'];
@@ -155,11 +138,12 @@ function table(x, y){
             for(let j = 0; j < Object.keys(output).length; j++){
                 let outputKey = Object.keys(output)[j];
                 let outputValue = output[outputKey];
-                let outputCell = document.getElementById(`Output${this.tableDict['Header']['Input'][j]}Row${i+1}`);
+                let outputCell = document.getElementById(`Output${this.tableDict['Header']['Output'][j]}Row${i+1}`);
                 outputCell.innerText = outputValue;
             }
             
         }
+        openTab(event, "Table");
     }
 
     this.reInit = function(){
