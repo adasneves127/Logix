@@ -74,7 +74,7 @@ function table(x, y){
 
     this.loadFunction = function(){
         let splitFunc = document.getElementById("FunctionInput").value.split("=");
-        const operations = ["^", "<->", "v", "~", "->"];
+        const operations = ["^", "->", "v", "~", "<->"];
         let eq = {}
         operations.forEach(operation => {
             if(splitFunc[1].includes(operation)){
