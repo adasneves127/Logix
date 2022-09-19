@@ -1,6 +1,9 @@
+let _Test;
+
 function loadAnd(P, Q, O){
 
     let in1, in2, out
+
     for(let i = 0; i < inputSize; i++){
         if(document.getElementById(`Header${i}`).innerHTML == P){
             in1 = i;
